@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
-  const tokenRedirectUrl = requestUrl.searchParams.get("tokenRedirectUrl");
   const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
@@ -54,6 +53,11 @@ export async function POST(request: Request) {
   );
 
   if (!ssoResponse.ok) {
+    console.log(
+      "SSO response not ok",
+      ssoResponse.status,
+      ssoResponse.statusText,
+    );
     return NextResponse.redirect(
       `${requestUrl.origin}/login?error=Could not authenticate user`,
       {
@@ -63,10 +67,14 @@ export async function POST(request: Request) {
   }
 
   const { sessionId } = await ssoResponse.json();
-
+  console.log(
+    "session id",
+    sessionId,
+    `http://localhost:4100/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
+  );
   // Redirect back home after sign-in, with the tokenRedirectUrl
   return NextResponse.redirect(
-    `http://localhost:4100/docs/zp/auth/external-redirect?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea&sessionId=${sessionId}`,
+    `http://localhost:4100/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,
