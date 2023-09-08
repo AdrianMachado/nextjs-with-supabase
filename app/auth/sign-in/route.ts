@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     );
   }
 
-  await fetch(
+  const ssoResponse = await fetch(
     "http://localhost:4100/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea",
     {
       method: "POST",
@@ -53,11 +53,20 @@ export async function POST(request: Request) {
     },
   );
 
+  if (!ssoResponse.ok) {
+    return NextResponse.redirect(
+      `${requestUrl.origin}/login?error=Could not authenticate user`,
+      {
+        status: 301,
+      },
+    );
+  }
+
+  const { sessionId } = await ssoResponse.json();
+
   // Redirect back home after sign-in, with the tokenRedirectUrl
   return NextResponse.redirect(
-    `${requestUrl.origin}/?tokenRedirectUrl=${
-      encodeURIComponent(tokenRedirectUrl ?? "")
-    }`,
+    `http://localhost:4100/docs/zp/auth/external-redirect?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea&sessionId=${sessionId}`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,
