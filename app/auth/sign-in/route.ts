@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   }
 
   await fetch(
-    "http://localhost:4100/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev",
+    "http://localhost:4100/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea",
     {
       method: "POST",
       headers: {
