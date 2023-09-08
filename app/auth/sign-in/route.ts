@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "dev-portal-secret": "testing12345",
+        "dev-portal-secret": "test12345",
       },
       body: JSON.stringify({
         email: user.email,
@@ -57,6 +57,7 @@ export async function POST(request: Request) {
       "SSO response not ok",
       ssoResponse.status,
       ssoResponse.statusText,
+      await ssoResponse.text(),
     );
     return NextResponse.redirect(
       `${requestUrl.origin}/login?error=Could not authenticate user`,
