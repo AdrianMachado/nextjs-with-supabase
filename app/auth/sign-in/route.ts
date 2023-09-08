@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   }
 
   const ssoResponse = await fetch(
-    "http://localhost:4100/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea",
+    "https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev&dev-portal-id=chocolate-leech-main-b8c57ea",
     {
       method: "POST",
       headers: {
@@ -70,11 +70,11 @@ export async function POST(request: Request) {
   console.log(
     "session id",
     sessionId,
-    `http://localhost:4100/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
+    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
   );
   // Redirect back home after sign-in, with the tokenRedirectUrl
   return NextResponse.redirect(
-    `http://localhost:4100/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
+    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,

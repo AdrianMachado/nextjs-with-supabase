@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       );
     }
     await fetch(
-      "http://localhost:4100/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev",
+      "https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-sso?dev-portal-host=chocolate-leech-main-b8c57ea.d2.zuplo.dev",
       {
         method: "POST",
         headers: {
