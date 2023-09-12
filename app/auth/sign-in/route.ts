@@ -71,11 +71,11 @@ export async function POST(request: Request) {
   console.log(
     "session id",
     sessionId,
-    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
+    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external/redirect?sessionId=${sessionId}`,
   );
   // Redirect back home after sign-in, with the tokenRedirectUrl
   return NextResponse.redirect(
-    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-redirect?sessionId=${sessionId}`,
+    `https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external/redirect?sessionId=${sessionId}`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,
