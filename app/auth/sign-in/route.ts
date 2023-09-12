@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   }
 
   const ssoResponse = await fetch(
-    "https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-sso?dev-portal-host=dev-portal-test-project-two-main-aeff19f.d2.zuplo.dev&dev-portal-id=dev-portal-test-project-two-main-aeff19f",
+    "https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external/sso?dev-portal-host=dev-portal-test-project-two-main-aeff19f.d2.zuplo.dev&dev-portal-id=dev-portal-test-project-two-main-aeff19f",
     {
       method: "POST",
       headers: {
