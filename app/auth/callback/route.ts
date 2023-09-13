@@ -16,6 +16,7 @@ export async function GET(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
     const sessionData = await supabase.auth.exchangeCodeForSession(code);
     const { user } = sessionData?.data;
+    console.log("user", user);
     if (!user) {
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
