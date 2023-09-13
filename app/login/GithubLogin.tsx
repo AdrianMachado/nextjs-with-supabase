@@ -32,7 +32,7 @@ const GithubLogin = ({
       }}
       className="border border-purple-700 rounded px-4 py-2 text-black dark:text-white mb-2"
     >
-      Github (WIP)
+      Github
     </button>
   );
 };
