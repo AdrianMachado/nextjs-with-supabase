@@ -33,9 +33,9 @@ export default function Login({
       <form
         className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
         action={`/auth/sign-in${
-          typeof searchParams?.tokenRedirectUrl === "string"
-            ? `?tokenRedirectUrl=${encodeURIComponent(
-                searchParams.tokenRedirectUrl
+          typeof searchParams?.["session-create-url"] === "string"
+            ? `?session-create-url=${encodeURIComponent(
+                searchParams["session-create-url"]
               )}`
             : ""
         }`}
@@ -67,8 +67,8 @@ export default function Login({
         </button>
 
         <GithubLogin
-          tokenRedirectUrl={
-            searchParams?.tokenRedirectUrl as string | undefined
+          sessionCreateUrl={
+            searchParams?.["session-create-url"] as string | undefined
           }
         />
         <button

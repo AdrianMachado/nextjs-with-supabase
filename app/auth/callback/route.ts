@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-sign-in-with-code-exchange
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
 
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
@@ -23,22 +24,50 @@ export async function GET(request: Request) {
         },
       );
     }
-    await fetch(
-      "https://dev-portal-git-sessionauth.zuplosite.com/docs/zp/auth/external-sso?dev-portal-host=dev-portal-test-project-two-main-aeff19f.d2.zuplo.dev",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "dev-portal-secret": "testing12345",
+
+    if (sessionCreateUrl) {
+      const ssoResponse = await fetch(
+        sessionCreateUrl,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "dev-portal-secret": "test12345",
+          },
+          body: JSON.stringify({
+            email: user.email,
+            name: user.user_metadata?.full_name,
+            email_verified: user.confirmed_at != null,
+            sub: user.id,
+            picture: user.user_metadata?.avatar_url,
+          }),
         },
-        body: JSON.stringify({
-          email: user.email,
-          name: user.user_metadata?.full_name,
-          email_verified: user.confirmed_at != null,
-          sub: user.id,
-        }),
-      },
-    );
+      );
+
+      if (!ssoResponse.ok) {
+        console.log(
+          "SSO response not ok",
+          ssoResponse.status,
+          ssoResponse.statusText,
+          await ssoResponse.text(),
+        );
+        return NextResponse.redirect(
+          `${requestUrl.origin}/login?error=Could not authenticate user`,
+          {
+            status: 301,
+          },
+        );
+      }
+
+      const { redirectUri } = await ssoResponse.json();
+      return NextResponse.redirect(
+        redirectUri,
+        {
+          // a 301 status is required to redirect from a POST to a GET route
+          status: 301,
+        },
+      );
+    }
   }
 
   // URL to redirect to after sign in process completes

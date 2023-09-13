@@ -3,9 +3,9 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const GithubLogin = ({
-  tokenRedirectUrl,
+  sessionCreateUrl,
 }: {
-  tokenRedirectUrl: string | undefined;
+  sessionCreateUrl: string | undefined;
 }) => {
   return (
     <button
@@ -15,14 +15,16 @@ const GithubLogin = ({
         await supabase.auth.signInWithOAuth({
           provider: "github",
           options: {
-            redirectTo: tokenRedirectUrl
+            redirectTo: sessionCreateUrl
               ? `${
                   window.location.origin
-                }?tokenRedirectUrl=${encodeURIComponent(tokenRedirectUrl)}`
+                }/auth/callback?session-create-url=${encodeURIComponent(
+                  sessionCreateUrl
+                )}`
               : undefined,
-            queryParams: tokenRedirectUrl
+            queryParams: sessionCreateUrl
               ? {
-                  tokenRedirectUrl: encodeURIComponent(tokenRedirectUrl),
+                  sessionCreateUrl: encodeURIComponent(sessionCreateUrl),
                 }
               : undefined,
           },
