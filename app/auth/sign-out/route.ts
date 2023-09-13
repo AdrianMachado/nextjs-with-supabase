@@ -4,6 +4,19 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+export async function GET(request: Request) {
+  const requestUrl = new URL(request.url);
+  const redirectUri = requestUrl.searchParams.get("redirect_uri");
+  const supabase = createRouteHandlerClient({ cookies });
+
+  await supabase.auth.signOut();
+
+  return NextResponse.redirect(redirectUri ?? `${requestUrl.origin}/login`, {
+    // a 301 status is required to redirect from a POST to a GET route
+    status: 301,
+  });
+}
+
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
   const redirectUri = requestUrl.searchParams.get("redirect_uri");
