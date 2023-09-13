@@ -72,7 +72,13 @@ export default function Login({
           }
         />
         <button
-          formAction="/auth/sign-up"
+          formAction={`/auth/sign-up${
+            typeof searchParams?.["session-create-url"] === "string"
+              ? `?session-create-url=${encodeURIComponent(
+                  searchParams["session-create-url"]
+                )}`
+              : ""
+          }`}
           className="border border-gray-700 rounded px-4 py-2 text-black dark:text-white mb-2"
         >
           Sign Up
