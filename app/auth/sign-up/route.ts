@@ -15,6 +15,13 @@ export async function POST(request: Request) {
   if (sessionCreateUrl) {
     redirectUrl.searchParams.set("session-create-url", sessionCreateUrl);
   }
+  console.log(
+    "Sign up",
+    email,
+    password,
+    sessionCreateUrl,
+    redirectUrl.toString(),
+  );
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -24,6 +31,7 @@ export async function POST(request: Request) {
   });
 
   if (error) {
+    console.log("Sign up error", error);
     return NextResponse.redirect(
       `${requestUrl.origin}/login?error=Could not authenticate user`,
       {
