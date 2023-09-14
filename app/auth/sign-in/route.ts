@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     password,
   });
   if (error) {
+    console.log("Sign in error", error);
     return NextResponse.redirect(
       `${requestUrl.origin}/login?error=Could not authenticate user`,
       {
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
     );
 
     if (!ssoResponse.ok) {
+      console.log("SSO error", await ssoResponse.text());
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
         {
