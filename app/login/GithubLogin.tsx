@@ -17,7 +17,11 @@ const GithubLogin = ({
           options: {
             redirectTo:
               typeof sessionCreateUrl === "string"
-                ? `${window.location.origin}/auth/callback`
+                ? `${
+                    window.location.origin
+                  }/auth/callback?session-create-url=${encodeURIComponent(
+                    sessionCreateUrl
+                  )}`
                 : undefined,
             queryParams:
               // This will allow your /auth/callback route to receive the
