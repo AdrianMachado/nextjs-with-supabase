@@ -11,12 +11,18 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
-
+  console.log(
+    "callback",
+    sessionCreateUrl,
+  );
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
     const sessionData = await supabase.auth.exchangeCodeForSession(code);
     const { user } = sessionData?.data;
     if (!user) {
+      console.log(
+        "NO USER",
+      );
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
         {
@@ -45,6 +51,10 @@ export async function GET(request: Request) {
       );
 
       if (!ssoResponse.ok) {
+        console.log(
+          "SOO NOT OK",
+          await ssoResponse.text(),
+        );
         return NextResponse.redirect(
           `${requestUrl.origin}/login?error=Could not authenticate user`,
           {
