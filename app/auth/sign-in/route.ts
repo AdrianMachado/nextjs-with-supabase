@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
-  const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
   const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
@@ -26,24 +25,16 @@ export async function POST(request: Request) {
     );
   }
 
-  const { user } = data;
-  if (!user) {
-    return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=Could not authenticate user`,
-      {
-        status: 301,
-      },
-    );
-  }
-
+  const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
   if (sessionCreateUrl) {
+    const user = data.user;
     const ssoResponse = await fetch(
       sessionCreateUrl,
       {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "dev-portal-secret": "test12345",
+          "authorization": `Bearer ${process.env.ZUPLO_API_KEY}`,
         },
         body: JSON.stringify({
           email: user.email,
@@ -56,12 +47,6 @@ export async function POST(request: Request) {
     );
 
     if (!ssoResponse.ok) {
-      console.log(
-        "SSO response not ok",
-        ssoResponse.status,
-        ssoResponse.statusText,
-        await ssoResponse.text(),
-      );
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
         {
@@ -74,14 +59,12 @@ export async function POST(request: Request) {
     return NextResponse.redirect(
       redirectUri,
       {
-        // a 301 status is required to redirect from a POST to a GET route
         status: 301,
       },
     );
   }
 
   return NextResponse.redirect(requestUrl.origin, {
-    // a 301 status is required to redirect from a POST to a GET route
     status: 301,
   });
 }

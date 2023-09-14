@@ -6,13 +6,15 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
+  // The Developer Portal will send a `redirect_uri` query parameter to this
+  // route. This is the URL that the user should be redirected to after signing
+  // out.
   const redirectUri = requestUrl.searchParams.get("redirect_uri");
   const supabase = createRouteHandlerClient({ cookies });
 
   await supabase.auth.signOut();
 
   return NextResponse.redirect(redirectUri ?? `${requestUrl.origin}/login`, {
-    // a 301 status is required to redirect from a POST to a GET route
     status: 301,
   });
 }

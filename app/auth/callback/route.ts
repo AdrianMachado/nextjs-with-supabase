@@ -16,7 +16,6 @@ export async function GET(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
     const sessionData = await supabase.auth.exchangeCodeForSession(code);
     const { user } = sessionData?.data;
-    console.log("user", user);
     if (!user) {
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
@@ -33,7 +32,7 @@ export async function GET(request: Request) {
           method: "POST",
           headers: {
             "content-type": "application/json",
-            "dev-portal-secret": "test12345",
+            "authorization": `Bearer ${process.env.ZUPLO_API_KEY}`,
           },
           body: JSON.stringify({
             email: user.email,
@@ -46,12 +45,6 @@ export async function GET(request: Request) {
       );
 
       if (!ssoResponse.ok) {
-        console.log(
-          "SSO response not ok",
-          ssoResponse.status,
-          ssoResponse.statusText,
-          await ssoResponse.text(),
-        );
         return NextResponse.redirect(
           `${requestUrl.origin}/login?error=Could not authenticate user`,
           {

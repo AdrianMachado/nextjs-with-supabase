@@ -66,11 +66,7 @@ export default function Login({
           Sign In
         </button>
 
-        <GithubLogin
-          sessionCreateUrl={
-            searchParams?.["session-create-url"] as string | undefined
-          }
-        />
+        <GithubLogin sessionCreateUrl={searchParams?.["session-create-url"]} />
         <button
           formAction={`/auth/sign-up${
             typeof searchParams?.["session-create-url"] === "string"

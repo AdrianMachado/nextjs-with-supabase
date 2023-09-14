@@ -5,7 +5,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const GithubLogin = ({
   sessionCreateUrl,
 }: {
-  sessionCreateUrl: string | undefined;
+  sessionCreateUrl: string | string[] | undefined;
 }) => {
   return (
     <button
@@ -15,18 +15,19 @@ const GithubLogin = ({
         await supabase.auth.signInWithOAuth({
           provider: "github",
           options: {
-            redirectTo: sessionCreateUrl
-              ? `${
-                  window.location.origin
-                }/auth/callback?session-create-url=${encodeURIComponent(
-                  sessionCreateUrl
-                )}`
-              : undefined,
-            queryParams: sessionCreateUrl
-              ? {
-                  sessionCreateUrl: encodeURIComponent(sessionCreateUrl),
-                }
-              : undefined,
+            redirectTo:
+              typeof sessionCreateUrl === "string"
+                ? `${window.location.origin}/auth/callback`
+                : undefined,
+            queryParams:
+              // This will allow your /auth/callback route to receive the
+              // session-create-url query param and redirect the user to the
+              // dev portal after signing in.
+              typeof sessionCreateUrl === "string"
+                ? {
+                    sessionCreateUrl: encodeURIComponent(sessionCreateUrl),
+                  }
+                : undefined,
           },
         });
       }}

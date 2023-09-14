@@ -9,8 +9,8 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
-  const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
   const supabase = createRouteHandlerClient({ cookies });
+  const sessionCreateUrl = requestUrl.searchParams.get("session-create-url");
   const redirectUrl = new URL(`${requestUrl.origin}/auth/callback`);
   if (sessionCreateUrl) {
     redirectUrl.searchParams.set("session-create-url", sessionCreateUrl);
