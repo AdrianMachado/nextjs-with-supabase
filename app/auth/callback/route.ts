@@ -52,7 +52,7 @@ export async function GET(request: Request) {
 
       if (!ssoResponse.ok) {
         console.log(
-          "SOO NOT OK",
+          "SSO NOT OK",
           await ssoResponse.text(),
         );
         return NextResponse.redirect(
