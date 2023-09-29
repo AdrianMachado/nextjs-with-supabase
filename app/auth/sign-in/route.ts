@@ -10,17 +10,12 @@ export async function POST(request: Request) {
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
   const supabase = createRouteHandlerClient({ cookies });
-  console.log(
-    "Sign in",
-    email,
-    password,
-  );
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
   if (error) {
-    console.log("Sign in error", error);
+    console.error("Sign in error", error);
     return NextResponse.redirect(
       `${requestUrl.origin}/login?error=Could not authenticate user`,
       {
@@ -52,7 +47,7 @@ export async function POST(request: Request) {
     );
 
     if (!ssoResponse.ok) {
-      console.log("SSO error", await ssoResponse.text());
+      console.error("SSO error", await ssoResponse.text());
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=Could not authenticate user`,
         {
